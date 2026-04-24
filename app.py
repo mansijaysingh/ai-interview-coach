@@ -79,3 +79,26 @@ def evaluate_answer(question, answer):
 result=evaluate_answer(question, answer)
 print("\nEvaluation:\n")
 print(result)
+
+
+def generate_ideal_answer(question):
+  prompt=f"""
+    You are an expert interviewer.
+
+    Provide a perfect, concise, and well-structured answer for the following interview question:
+
+    Question: {question}
+
+    Keep it clear, professional, and easy to understand.
+    """
+  response=client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+      {"role":"user", "content":prompt}
+    ]
+  )
+  return response.choices[0].message.content
+
+ideal=generate_ideal_answer(question)
+print("\nIdeal Answer:\n")
+print(ideal)
