@@ -7,6 +7,8 @@ load_dotenv()
 
 client=OpenAI()
 
+
+print("\nWelcome to AI Interview Coach\n")
 role=input("Enter your role (Python / AI / Frontend): ")
 difficulty=input("Enter difficulty level (Easy / Medium / Hard): ")
 
@@ -37,9 +39,9 @@ def generate_question(role, difficulty):
   return response.choices[0].message.content
 
 
-question=generate_question(role,difficulty)
-print(question)
-answer = input("\nYour Answer: ")
+# question=generate_question(role,difficulty)
+# print(question)
+# answer = input("\nYour Answer: ")
 
 def evaluate_answer(question, answer):
   prompt= f"""
@@ -76,9 +78,9 @@ def evaluate_answer(question, answer):
   )
   return response.choices[0].message.content
 
-result=evaluate_answer(question, answer)
-print("\nEvaluation:\n")
-print(result)
+# result=evaluate_answer(question, answer)
+# # print("\nEvaluation:\n")
+# print(result)
 
 
 def generate_ideal_answer(question):
@@ -99,9 +101,9 @@ def generate_ideal_answer(question):
   )
   return response.choices[0].message.content
 
-ideal=generate_ideal_answer(question)
-print("\nIdeal Answer:\n")
-print(ideal)
+# ideal=generate_ideal_answer(question)
+# print("\nIdeal Answer:\n")
+# print(ideal)
 
 def generate_follow_up(question, answer):
   prompt=f"""
@@ -128,6 +130,29 @@ def generate_follow_up(question, answer):
         )
   return response.choices[0].message.content
 
-follow_up=generate_follow_up(question, answer)
-print("\nFollow-up Question:\n")
-print(follow_up)
+# follow_up=generate_follow_up(question, answer)
+# print("\nFollow-up Question:\n")
+# print(follow_up)
+
+num_questions=3
+
+for i in range(num_questions):
+    print(f"\n--- Question {i+1} ---")
+
+    question = generate_question(role, difficulty)
+    print("\nInterview Question:\n")
+    print(question)
+
+    answer = input("\nYour Answer: ")
+
+    result = evaluate_answer(question, answer)
+    print("\nEvaluation:\n")
+    print(result)
+
+    ideal = generate_ideal_answer(question)
+    print("\nIdeal Answer:\n")
+    print(ideal)
+
+    followup = generate_follow_up(question, answer)
+    print("\nFollow-up Question:\n")
+    print(followup)
