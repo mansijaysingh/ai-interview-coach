@@ -102,3 +102,32 @@ def generate_ideal_answer(question):
 ideal=generate_ideal_answer(question)
 print("\nIdeal Answer:\n")
 print(ideal)
+
+def generate_follow_up(question, answer):
+  prompt=f"""
+    You are an expert interviewer.
+
+    Based on the following interview question and candidate's answer, generate one relevant follow-up question.
+
+    Question: {question}
+    Candidate Answer: {answer}
+
+    The follow-up should:
+    - Dig deeper into the topic
+    - Be specific
+    - Feel like a real interview
+
+    Only give the question.
+    """
+  response=client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+      {"role":"user", "content":prompt}
+    ]
+      
+        )
+  return response.choices[0].message.content
+
+follow_up=generate_follow_up(question, answer)
+print("\nFollow-up Question:\n")
+print(follow_up)
