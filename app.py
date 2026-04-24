@@ -41,13 +41,41 @@ question=generate_question(role,difficulty)
 print(question)
 answer = input("\nYour Answer: ")
 
+def evaluate_answer(question, answer):
+  prompt= f"""
+    You are an expert technical interviewer.
 
+    Question: {question}
+    Candidate Answer: {answer}
 
+    Evaluate the answer based on:
+    - Clarity
+    - Technical Accuracy
+    - Completeness
 
+    Give output in this format:
 
+    Score: X/10
 
-# if __name__ =="__main__":
-#   user_input=input("Enter your interview question: ")
-#   answer=ask_question(user_input)
-#   print("\nAI Response:\n")
-#   print(answer)
+    Strengths:
+    - point 1
+    - point 2
+
+    Weaknesses:
+    - point 1
+    - point 2
+
+    Suggestion:
+    - improvement suggestion
+    """
+  response=client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+      {"role":"user", "content":prompt}
+    ]
+  )
+  return response.choices[0].message.content
+
+result=evaluate_answer(question, answer)
+print("\nEvaluation:\n")
+print(result)
