@@ -69,14 +69,22 @@ print(f"\nDifficulty Level: {difficulty.title()}\n")
 
 
 
-def generate_question(role, difficulty,experience):
-  prompt=f"""
-    You are an expert interviewer.
+def generate_question(role, difficulty,experience, previous_questions):
+  prompt= f"""
+You are an expert interviewer.
 
-    Generate one {difficulty} level interview question for a {experience} {role} candidate.
+Generate ONE {difficulty} level interview question for a {experience} {role} candidate.
 
-    Only give the question.
-    """
+STRICT RULES:
+- Do NOT repeat or rephrase similar questions
+- Each question must be from a completely DIFFERENT topic
+- Avoid already asked questions
+
+Previously asked questions:
+{previous_questions}
+
+Only return the question.
+"""
   response=client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[
@@ -145,30 +153,30 @@ def generate_ideal_answer(question):
 
 
 
-def generate_follow_up(question, answer):
-  prompt=f"""
-    You are an expert interviewer.
+# def generate_follow_up(question, answer):
+#   prompt=f"""
+#     You are an expert interviewer.
 
-    Based on the following interview question and candidate's answer, generate one relevant follow-up question.
+#     Based on the following interview question and candidate's answer, generate one relevant follow-up question.
 
-    Question: {question}
-    Candidate Answer: {answer}
+#     Question: {question}
+#     Candidate Answer: {answer}
 
-    The follow-up should:
-    - Dig deeper into the topic
-    - Be specific
-    - Feel like a real interview
+#     The follow-up should:
+#     - Dig deeper into the topic
+#     - Be specific
+#     - Feel like a real interview
 
-    Only give the question.
-    """
-  response=client.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[
-      {"role":"user", "content":prompt}
-    ]
+#     Only give the question.
+#     """
+#   response=client.chat.completions.create(
+#     model="gpt-4o-mini",
+#     messages=[
+#       {"role":"user", "content":prompt}
+#     ]
       
-        )
-  return response.choices[0].message.content
+#         )
+#   return response.choices[0].message.content
 
 
 
@@ -182,7 +190,8 @@ questions_asked=0
 
 interview_data=[]
 
-asked_questions=set()
+asked_questions=[]
+
 
 
 for i in range(num_questions):
@@ -192,22 +201,34 @@ for i in range(num_questions):
     print(f"\n--- Question {i+1} ---")
 
     while True:
-       question=generate_question(role,difficulty,experience)
+       question=generate_question(role,difficulty,experience,asked_questions)
 
-       if question in asked_questions:
-          asked_questions.add(question)
+       if question not in asked_questions:
+          asked_questions.append(question)
           break
-    print("\nInterview Question:\n")
+    # print("\nInterview Question:\n")
     print(question)
 
     answer = input("\nYour Answer: ").strip().lower()
 
     if answer == "exit":
        print("Interview ended by user.")
+
+       interview_data.append({
+          "question":question,
+          "answer":"Exited",
+          "evaluation": "Not Attempted"
+       })
        break
     
     if answer == "skip":
        print("Question skipped.")
+
+       interview_data.append({
+          "question":question,
+          "answer":"Skipped",
+          "evaluation": "Not Attempted"
+       })
        continue
 
     result = evaluate_answer(question, answer)
