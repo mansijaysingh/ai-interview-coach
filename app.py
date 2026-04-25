@@ -143,9 +143,7 @@ def generate_ideal_answer(question):
   )
   return response.choices[0].message.content
 
-# ideal=generate_ideal_answer(question)
-# print("\nIdeal Answer:\n")
-# print(ideal)
+
 
 def generate_follow_up(question, answer):
   prompt=f"""
@@ -172,10 +170,11 @@ def generate_follow_up(question, answer):
         )
   return response.choices[0].message.content
 
-# follow_up=generate_follow_up(question, answer)
-# print("\nFollow-up Question:\n")
-# print(follow_up)
 
+
+print("\n--- Starting Interview Simulation ---")
+print("\nType 'skip' to skip a question")
+print("Type 'exit' to end interview anytime\n")
 
 for i in range(num_questions):
     print(f"\n--- Question {i+1} ---")
@@ -184,16 +183,18 @@ for i in range(num_questions):
     print("\nInterview Question:\n")
     print(question)
 
-    answer = input("\nYour Answer: ")
+    answer = input("\nYour Answer: ").strip().lower()
+
+    if answer == "exit":
+       print("Interview ended by user.")
+       break
+    
+    if answer == "skip":
+       print("Question skipped.")
+       continue
 
     result = evaluate_answer(question, answer)
     print("\nEvaluation:\n")
     print(result)
 
-    ideal = generate_ideal_answer(question)
-    print("\nIdeal Answer:\n")
-    print(ideal)
-
-    followup = generate_follow_up(question, answer)
-    print("\nFollow-up Question:\n")
-    print(followup)
+  
