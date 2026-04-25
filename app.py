@@ -180,6 +180,8 @@ scores=[]
 attempted=0
 questions_asked=0
 
+interview_data=[]
+
 
 for i in range(num_questions):
     questions_asked+=1
@@ -202,6 +204,12 @@ for i in range(num_questions):
        continue
 
     result = evaluate_answer(question, answer)
+
+    interview_data.append({
+       "question": question,
+       "answer": answer,
+       "evaluation": result
+    })
     
     import re
     match = re.search(r"Score:\s*(\d+)", result)
@@ -213,6 +221,20 @@ for i in range(num_questions):
 
 
 print("\n--- Interview Summary ---")
+print("\n--- Detailed Feedback ---\n")
+
+for i, data in enumerate(interview_data, start=1):
+    print(f"\nQuestion {i}:")
+    print(data["question"])
+
+    print("\nYour Answer:")
+    print(data["answer"])
+
+    print("\nEvaluation:")
+    print(data["evaluation"])
+
+    print("-"*40)
+
 print(f"Total Questions Asked: {questions_asked}")
 print(f"Attempted Questions: {attempted}")
 
