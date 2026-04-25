@@ -10,6 +10,8 @@ client=OpenAI()
 
 print("\nWelcome to AI Interview Coach\n")
 
+def normalize(text):
+   return text.strip().lower()
 
 roles = [
     "Python",
@@ -24,15 +26,19 @@ print("Available Roles:")
 for r in roles:
     print("-", r)
 
-role=input("\nEnter role:").lower()
+role_input=input("\nEnter role: ")
+role=normalize(role_input)
 print(f"\nSelected Role: {role.title()}")
 
 if role not in roles:
    print("Invalid role selected!")
    exit()
 
-experience=input("Enter your experience(Junior / Mid / Senior): ").lower()
-if experience not in ["Junior", "Mid", "Senior"]:
+experience_input=input("Enter your experience(Junior / Mid / Senior): ")
+experience=normalize(experience_input)
+valid_experience = ['junior', 'mid', 'senior']
+
+if experience not in valid_experience:
    print("Invalid experience level!")
    exit()
 
@@ -42,7 +48,13 @@ if num_questions >30:
    print("max limit is 30!")
    exit()
 
-difficulty=input("Enter difficulty level (Easy / Medium / Hard): ").lower()
+difficulty=input("Enter difficulty level (Easy / Medium / Hard): ")
+difficulty=normalize(difficulty)
+valid_difficulties = ['easy', 'medium', 'hard']
+if difficulty not in valid_difficulties:
+   print("Invalid difficulty level!")
+   exit()
+   g
 
 
 # def ask_question(question):
