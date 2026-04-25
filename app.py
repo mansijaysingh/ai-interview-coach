@@ -13,14 +13,15 @@ print("\nWelcome to AI Interview Coach\n")
 def normalize(text):
    return text.strip().lower()
 
+ # Define available roles
 roles = [
-    "Python",
-    "AI/ML",
-    "Frontend",
-    "Backend",
-    "Full Stack",
-    "Data Analyst",
-    "HR"
+    "python",
+    "ai/ml",
+    "frontend",
+    "backend",
+    "full stack",
+    "data analyst",
+    "hr"
 ]
 print("Available Roles:")
 for r in roles:
@@ -28,12 +29,14 @@ for r in roles:
 
 role_input=input("\nEnter role: ")
 role=normalize(role_input)
-print(f"\nSelected Role: {role.title()}")
 
 if role not in roles:
    print("Invalid role selected!")
    exit()
+print(f"\nRole: {role.title()}")
 
+
+# Define experience levels
 experience_input=input("Enter your experience(Junior / Mid / Senior): ")
 experience=normalize(experience_input)
 valid_experience = ['junior', 'mid', 'senior']
@@ -41,30 +44,30 @@ valid_experience = ['junior', 'mid', 'senior']
 if experience not in valid_experience:
    print("Invalid experience level!")
    exit()
+print(f"\nExperience Level: {experience.title()}")
 
 
+# Get number of questions
 num_questions=int(input("How many questions? (max 30): "))
 if num_questions >30:
    print("max limit is 30!")
    exit()
 
+print(f"\nNumber of Questions: {num_questions}\n")
+
+
+# Get difficulty level
 difficulty=input("Enter difficulty level (Easy / Medium / Hard): ")
 difficulty=normalize(difficulty)
 valid_difficulties = ['easy', 'medium', 'hard']
 if difficulty not in valid_difficulties:
    print("Invalid difficulty level!")
    exit()
-   g
+print(f"\nDifficulty Level: {difficulty.title()}\n")
 
 
-# def ask_question(question):
-#   response=client.chat.completions.create(
-#     model="gpt-3.5-turbo",
-#     messages=[
-#       {"role":"user", "content": question}
-#     ]
-#   )
-#   return response.choices[0].message.content
+
+
 
 def generate_question(role, difficulty,experience):
   prompt=f"""
@@ -84,9 +87,7 @@ def generate_question(role, difficulty,experience):
   return response.choices[0].message.content
 
 
-# question=generate_question(role,difficulty)
-# print(question)
-# answer = input("\nYour Answer: ")
+
 
 def evaluate_answer(question, answer):
   prompt= f"""
@@ -122,10 +123,6 @@ def evaluate_answer(question, answer):
     ]
   )
   return response.choices[0].message.content
-
-# result=evaluate_answer(question, answer)
-# # print("\nEvaluation:\n")
-# print(result)
 
 
 def generate_ideal_answer(question):
