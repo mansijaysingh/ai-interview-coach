@@ -176,7 +176,15 @@ print("\n--- Starting Interview Simulation ---")
 print("\nType 'skip' to skip a question")
 print("Type 'exit' to end interview anytime\n")
 
+scores=[]
+attempted=0
+questions_asked=0
+
+
 for i in range(num_questions):
+    questions_asked+=1
+
+
     print(f"\n--- Question {i+1} ---")
 
     question = generate_question(role, difficulty,experience)
@@ -197,4 +205,21 @@ for i in range(num_questions):
     print("\nEvaluation:\n")
     print(result)
 
-  
+    import re
+    match = re.search(r"Score:\s*(\d+)", result)
+
+    if match:
+     score = int(match.group(1))
+     scores.append(score)
+     attempted += 1
+
+
+print("\n--- Interview Summary ---")
+print(f"Total Questions Asked: {questions_asked}")
+print(f"Attempted Questions: {attempted}")
+
+if attempted>0:
+   avg_score=sum(scores)/attempted
+   print(f"Average Score: {avg_score:.2f}/10")
+else:
+   print("No questions attempted.")
