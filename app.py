@@ -25,6 +25,7 @@ for r in roles:
     print("-", r)
 
 role=input("\nEnter role:").lower()
+print(f"\nSelected Role: {role.title()}")
 
 if role not in roles:
    print("Invalid role selected!")
@@ -41,7 +42,7 @@ if num_questions >30:
    print("max limit is 30!")
    exit()
 
-difficulty=input("Enter difficulty level (Easy / Medium / Hard): ")
+difficulty=input("Enter difficulty level (Easy / Medium / Hard): ").lower()
 
 
 # def ask_question(question):
