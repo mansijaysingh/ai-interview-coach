@@ -202,9 +202,7 @@ for i in range(num_questions):
        continue
 
     result = evaluate_answer(question, answer)
-    print("\nEvaluation:\n")
-    print(result)
-
+    
     import re
     match = re.search(r"Score:\s*(\d+)", result)
 
