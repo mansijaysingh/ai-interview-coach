@@ -220,7 +220,7 @@ for i in range(num_questions):
      attempted += 1
 
 
-print("\n--- Interview Summary ---")
+
 print("\n--- Detailed Feedback ---\n")
 
 for i, data in enumerate(interview_data, start=1):
@@ -235,6 +235,7 @@ for i, data in enumerate(interview_data, start=1):
 
     print("-"*40)
 
+print("\n--- Interview Summary ---")
 print(f"Total Questions Asked: {questions_asked}")
 print(f"Attempted Questions: {attempted}")
 
@@ -243,3 +244,18 @@ if attempted>0:
    print(f"Average Score: {avg_score:.2f}/10")
 else:
    print("No questions attempted.")
+
+show_ideal=input("\nDo you want to see ideal answers? (yes/no): ").strip().lower()
+if show_ideal=="yes: ":
+   print("\n--- Ideal Answers ---\n")
+
+for i, in data in enumerate(interview_data,start=1):
+   print(f"\nQuestion {i}:")
+   print(data["question"])
+
+   ideal=generate_ideal_answer(data["question"])
+
+   print("\nIdeal Answer: ")
+   print(ideal)
+   print("-"*40)
+   
