@@ -9,8 +9,40 @@ client=OpenAI()
 
 
 print("\nWelcome to AI Interview Coach\n")
-role=input("Enter your role (Python / AI / Frontend): ")
+
+
+roles = [
+    "Python",
+    "AI/ML",
+    "Frontend",
+    "Backend",
+    "Full Stack",
+    "Data Analyst",
+    "HR"
+]
+print("Available Roles:")
+for r in roles:
+    print("-", r)
+
+role=input("\nEnter role:").lower()
+
+if role not in roles:
+   print("Invalid role selected!")
+   exit()
+
+experience=input("Enter your experience(Junior / Mid / Senior): ").lower()
+if experience not in ["Junior", "Mid", "Senior"]:
+   print("Invalid experience level!")
+   exit()
+
+
+num_questions=int(input("How many questions? (max 30): "))
+if num_questions >30:
+   print("max limit is 30!")
+   exit()
+
 difficulty=input("Enter difficulty level (Easy / Medium / Hard): ")
+
 
 # def ask_question(question):
 #   response=client.chat.completions.create(
@@ -21,13 +53,13 @@ difficulty=input("Enter difficulty level (Easy / Medium / Hard): ")
 #   )
 #   return response.choices[0].message.content
 
-def generate_question(role, difficulty):
+def generate_question(role, difficulty,experience):
   prompt=f"""
-    You are an expert technical interviewer.
+    You are an expert interviewer.
 
-    Generate one {difficulty} level interview question for a {role} role.
+    Generate one {difficulty} level interview question for a {experience} {role} candidate.
 
-    Only give the question, no explanation.
+    Only give the question.
     """
   response=client.chat.completions.create(
     model="gpt-4o-mini",
@@ -134,12 +166,11 @@ def generate_follow_up(question, answer):
 # print("\nFollow-up Question:\n")
 # print(follow_up)
 
-num_questions=3
 
 for i in range(num_questions):
     print(f"\n--- Question {i+1} ---")
 
-    question = generate_question(role, difficulty)
+    question = generate_question(role, difficulty,experience)
     print("\nInterview Question:\n")
     print(question)
 
