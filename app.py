@@ -182,6 +182,8 @@ questions_asked=0
 
 interview_data=[]
 
+asked_questions=set()
+
 
 for i in range(num_questions):
     questions_asked+=1
@@ -189,7 +191,12 @@ for i in range(num_questions):
 
     print(f"\n--- Question {i+1} ---")
 
-    question = generate_question(role, difficulty,experience)
+    while True:
+       question=generate_question(role,difficulty,experience)
+
+       if question in asked_questions:
+          asked_questions.add(question)
+          break
     print("\nInterview Question:\n")
     print(question)
 
@@ -245,11 +252,14 @@ if attempted>0:
 else:
    print("No questions attempted.")
 
+
+
+
 show_ideal=input("\nDo you want to see ideal answers? (yes/no): ").strip().lower()
 if show_ideal=="yes: ":
    print("\n--- Ideal Answers ---\n")
 
-for i, in data in enumerate(interview_data,start=1):
+for i, data in enumerate(interview_data,start=1):
    print(f"\nQuestion {i}:")
    print(data["question"])
 
@@ -258,4 +268,4 @@ for i, in data in enumerate(interview_data,start=1):
    print("\nIdeal Answer: ")
    print(ideal)
    print("-"*40)
-   
+
