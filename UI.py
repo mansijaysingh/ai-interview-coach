@@ -11,6 +11,11 @@ if "scores" not in st.session_state:
   st.session_state.scores=[]
 if "interview_data" not in st.session_state:
   st.session_state.interview_data=[]
+if"asked_question" not in st.session_state:
+  st.session_state.asked_question=[]
+if "input_key" not in st.session_state:
+  st.session_state.input_key=0
+
 
 
 
@@ -53,51 +58,90 @@ if not st.session_state.started:
    st.session_state.difficulty=difficulty
    st.session_state.num_questions=num_questions
 
+   st.rerun()
+
 if st.session_state.started:
     st.write("Interview Started 🚀")
     st.write(f"Question: {st.session_state.current_q + 1}")
 
-    if "current_question" not in st.session_state or st.session_state.current_question is None:
-      with st.spinner("Generating question..."):
-       st.session_state.current_question=generate_question(
-        st.session_state.role,
-        st.session_state.difficulty,
-        st.session_state.experience,
-        []
-      )
+    # if "current_question" not in st.session_state or st.session_state.current_question is None:
+    #   with st.spinner("Generating question..."):
+    #    st.session_state.current_question=generate_question(
+    #     st.session_state.role,
+    #     st.session_state.difficulty,
+    #     st.session_state.experience,
+    #     []
+    #   )
+       
+    if "current_question" not in st.session_state:
+      with st.spinner("Generating Questions..."):
+        st.session_state.current_question=generate_question(
+          st.session_state.role,
+          st.session_state.difficulty,
+          st.session_state.experience,
+          st.session_state.asked_question
+        )
+        st.session_state.asked_question.append(
+          st.session_state.current_question
+        )
+      
+
+
     st.markdown("### Question:")
     st.write(st.session_state.current_question)
 
-answer=st.text_area("Your Answer")
-col1, col2, col3 = st.columns(3)
-submit=col1.button("Submit")
-skip=col2.button("Skip")
-end=col3.button("End Interview")
+    answer=st.text_area(
+      "Your Answer",
+      key=f"answer_{st.session_state.input_key}"
+    )
+    col1, col2, col3 = st.columns(3)
+    submit=col1.button("Submit")
+    skip=col2.button("Skip")
+    end=col3.button("End Interview")
 
 
 #Submit logic
-if submit and answer:
-  st.session_state.interview_data.append({
-    "question":st.session_state.current_question,
-    "answer":answer
+    if submit and answer:
+      st.session_state.interview_data.append({
+      "question":st.session_state.current_question,
+      "answer":answer
   })
-  st.session_state.current_q+=1
+      st.session_state.current_q+=1
+      st.session_state.input_key+=1
+    
+      # if "answer" in st.session_state:
+      #  del st.session_state["answer"]
 
-  del st.session_state.current_question
-  st.rerun()
+      del st.session_state.current_question
+      st.rerun()
 
 
 #Skip logic
-if skip:
-  st.session_state.interview_data.append({
-    "question":st.session_state.current_question,
-    "answer":"Skipped"
+    if skip:
+     st.session_state.interview_data.append({
+      "question":st.session_state.current_question,
+      "answer":"Skipped"
   })
-  st.session_state.current_q+=1
-  del st.session_state.current_question
-  st.rerun()
+     st.session_state.current_q+=1
+     st.session_state.input_key+=1
+    
+    #  if "answer" in st.session_state:
+    #   del st.session_state["answer"]
+
+     del st.session_state.current_question
+    
+     st.rerun()
 
 #End interview
-if end:
-  st.session_state.Started=False
-  st.rerun()
+    if end:
+     st.session_state.started=False
+     st.session_state.current_q=0
+     st.session_state.interview_data=[]
+
+     if "current_question" in st.session_state:
+       del st.session_state.current_question
+      
+     if "answer" in st.session_state:
+       del st.session_state["answer"]
+      
+     st.rerun()
