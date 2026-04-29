@@ -151,6 +151,46 @@ def generate_ideal_answer(question):
   )
   return response.choices[0].message.content
 
+
+def evaluate_interview(interview_data):
+    combined=""
+
+    for i, data in enumerate(interview_data, start=1):
+       combined += f"""
+       Question {i}: {data['question']}
+       Answer: {data['answer']}
+
+"""
+    prompt=f"""
+You are an expert interviewer.
+
+Below is a full interview transcript:
+
+{combined}
+
+Evaluate the candidate's overall performance.
+
+Give output in this format:
+
+Final Score: X/10
+
+Overall Strengths:
+- point 1
+- point 2
+
+Overall Weaknesses:
+- point 1
+- point 2
+
+Final Suggestion:
+- improvement advice
+"""
+    response=client.chat.completions.create(
+       model="gpt-4o-mini",
+       messages=[{"role":"user", "content":prompt}]
+    )
+    return response.choices[0].content
+
 print("\n--- Starting Interview Simulation ---")
 print("\nType 'skip' to skip a question")
 print("Type 'exit' to end interview anytime\n")

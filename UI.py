@@ -1,6 +1,6 @@
 import streamlit as st
 import re
-from app import generate_question, evaluate_answer
+from app import generate_question, evaluate_answer,evaluate_interview
 
 st.set_page_config(page_title="AI Interview Coach", layout="centered")
 
@@ -67,49 +67,18 @@ if st.session_state.started:
   
     if st.session_state.current_q>=st.session_state.num_questions:
       st.success("Interview Completed 🎉")
-      scores=[]
-      attempted=0
 
-      for i, data in enumerate(st.session_state.interview_data, start=1):
-        st.markdown(f"##Question {i}")
-        st.write(data["question"])
-
-        st.write("**Your Answer:**")
-        st.write(data["answer"])
-
-        if data["answer"]!="Skipped":
-          with st.spinner("Evaluating..."):
-            result=evaluate_answer(data["question"], data["answer"])
-
-          st.write("**Evaluation:**")
-          st.write(result)
-
-          match=re.search(r"Score:\s*(\d+)", result)
-          if match:
-            score=int(match.group(1))
-            scores.append(score)
-            attempted+=1
-        else:
-          st.write("**Evaluation:** Skipped")
-        st.markdown("---")
-
-      st.markdown("## 📊 Final Summary")
-
-      st.write(f"Total Questions: {st.session_state.current_q}")
-      st.write(f"Attempted: {attempted}")
-
-      if attempted>0:
-        avg=sum(scores)/attempted
-        st.write(f"Average Score: {avg:.2f}/10")
-
-      else:
-        st.write("No question attempted.")
+      st.markdown("## 📊 Final Evaluation")
+      with st.spinner("Evaluating your overall performance..."):
+         result = evaluate_interview(st.session_state.interview_data)
+      st.write(result)
 
       if st.button("Restart Interview"):
         st.session_state.clear()
         st.rerun()
 
       st.stop()
+
        
     if "current_question" not in st.session_state:
       with st.spinner("Generating Questions..."):
