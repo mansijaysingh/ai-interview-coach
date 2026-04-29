@@ -189,7 +189,7 @@ Final Suggestion:
        model="gpt-4o-mini",
        messages=[{"role":"user", "content":prompt}]
     )
-    return response.choices[0].content
+    return response.choices[0].message.content
 
 print("\n--- Starting Interview Simulation ---")
 print("\nType 'skip' to skip a question")

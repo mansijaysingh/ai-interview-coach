@@ -16,6 +16,8 @@ if"asked_questions" not in st.session_state:
   st.session_state.asked_questions=[]
 if "input_key" not in st.session_state:
   st.session_state.input_key=0
+if "ended" not in st.session_state:
+  st.session_state.ended=False
 
 
 
@@ -64,7 +66,10 @@ if not st.session_state.started:
 if st.session_state.started:
     st.write("Interview Started 🚀")
 
-    if st.session_state.current_q>= st.session_state.num_questions:
+    if (
+      st.session_state.current_q>= st.session_state.num_questions
+      or st.session_state.ended
+    ):
        st.success("Interview Completed 🎉")
 
 
@@ -145,9 +150,9 @@ if st.session_state.started:
 
 #End interview
     if end:
-     st.session_state.started=False
-     st.session_state.current_q=0
-     st.session_state.interview_data=[]
+     st.session_state.ended=True
+     st.rerun()
+     
 
      if "current_question" in st.session_state:
        del st.session_state.current_question
