@@ -1,6 +1,6 @@
 import streamlit as st
 import re
-from app import generate_question, evaluate_answer,evaluate_interview
+from app import generate_question, evaluate_interview
 
 st.set_page_config(page_title="AI Interview Coach", layout="centered")
 
@@ -12,8 +12,8 @@ if "scores" not in st.session_state:
   st.session_state.scores=[]
 if "interview_data" not in st.session_state:
   st.session_state.interview_data=[]
-if"asked_question" not in st.session_state:
-  st.session_state.asked_question=[]
+if"asked_questions" not in st.session_state:
+  st.session_state.asked_questions=[]
 if "input_key" not in st.session_state:
   st.session_state.input_key=0
 
@@ -63,22 +63,32 @@ if not st.session_state.started:
 
 if st.session_state.started:
     st.write("Interview Started 🚀")
+
+    if st.session_state.current_q>= st.session_state.num_questions:
+       st.success("Interview Completed 🎉")
+
+
+       valid_data=[
+        data for data in st.session_state.interview_data
+        if data["answer"] != "Skipped"
+    ]
+
+       st.markdown("## 📊 Final Evaluation")
+
+       if len(valid_data)==0:
+        st.warning("No questions attempted")
+       else:
+        with st.spinner("Evaluating your overall performance..."):
+         result=evaluate_interview(valid_data)
+
+        st.write(result)
+
+       if st.button("Restart Interview"):
+         st.session_state.clear()
+         st.rerun()
+       st.stop()
+
     st.write(f"Question: {st.session_state.current_q + 1}")
-  
-    if st.session_state.current_q>=st.session_state.num_questions:
-      st.success("Interview Completed 🎉")
-
-      st.markdown("## 📊 Final Evaluation")
-      with st.spinner("Evaluating your overall performance..."):
-         result = evaluate_interview(st.session_state.interview_data)
-      st.write(result)
-
-      if st.button("Restart Interview"):
-        st.session_state.clear()
-        st.rerun()
-
-      st.stop()
-
        
     if "current_question" not in st.session_state:
       with st.spinner("Generating Questions..."):
@@ -86,9 +96,9 @@ if st.session_state.started:
           st.session_state.role,
           st.session_state.difficulty,
           st.session_state.experience,
-          st.session_state.asked_question
+          st.session_state.asked_questions
         )
-        st.session_state.asked_question.append(
+        st.session_state.asked_questions.append(
           st.session_state.current_question
         )
       
