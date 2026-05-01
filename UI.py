@@ -22,6 +22,8 @@ if "ended" not in st.session_state:
   st.session_state.ended=False
 if "show_ideal" not in st.session_state:
   st.session_state.show_ideal=False
+if "num_questions" not in st.session_state:
+  st.session_state.num_questions=0
 
 
 
@@ -67,14 +69,15 @@ if not st.session_state.started:
 
    st.rerun()
 
-if st.session_state.started:
+if not st.session_state.started:
     st.markdown("## 🎯Interview in Progress")
 
     if (
       st.session_state.current_q>= st.session_state.num_questions
       or st.session_state.ended
     ):
-       st.success("Interview Completed 🎉")
+       st.markdown("## 🎉 Interview Completed")
+       st.markdown("---")
 
 
        valid_data=[
@@ -85,7 +88,7 @@ if st.session_state.started:
        st.markdown("## 📊 Final Evaluation")
 
        if len(valid_data)==0:
-        st.warning("No questions attempted")
+        st.info("You skipped all questions. Try attempting at least one 😊")
        else:
         with st.spinner("Evaluating your overall performance..."):
          result=evaluate_interview(valid_data)
@@ -109,10 +112,11 @@ if st.session_state.started:
             st.write(ideal)
 
             st.markdown("---")
-
-       if st.button("Restart Interview"):
-         st.session_state.clear()
-         st.rerun()
+       col1,col2,col3=st.columns([1,2,1])
+       with col2:
+        if st.button("🔄 Restart Interview", use_container_width=True):
+          st.session_state.clear()
+          st.rerun()
        st.stop()
 
     
