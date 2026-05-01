@@ -1,6 +1,8 @@
 import streamlit as st
 import re
-from app import generate_question, evaluate_interview
+from app import generate_question, evaluate_interview,generate_ideal_answer
+
+
 
 st.set_page_config(page_title="AI Interview Coach", layout="centered")
 
@@ -18,6 +20,8 @@ if "input_key" not in st.session_state:
   st.session_state.input_key=0
 if "ended" not in st.session_state:
   st.session_state.ended=False
+if "show_ideal" not in st.session_state:
+  st.session_state.show_ideal=False
 
 
 
@@ -87,6 +91,24 @@ if st.session_state.started:
          result=evaluate_interview(valid_data)
 
         st.write(result)
+
+        if st.button("Show Ideal Answers"):
+          st.session_state.show_ideal=True
+        
+        if st.session_state.show_ideal:
+          st.markdown("## 💡 Ideal Answers")
+
+          for i, data in enumerate(st.session_state.interview_data, start=1):
+            st.markdown(f"### Question {i}")
+            st.write(data["question"])
+
+            with st.spinner("Generating ideal answer..."):
+              ideal=generate_ideal_answer(data["question"])
+
+            st.write("**Ideal Answer:**")
+            st.write(ideal)
+
+            st.markdown("---")
 
        if st.button("Restart Interview"):
          st.session_state.clear()
