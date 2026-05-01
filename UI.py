@@ -116,10 +116,10 @@ if st.session_state.started:
          st.rerun()
        st.stop()
 
-    st.write(f"Question {st.session_state.current_q + 1} / {st.session_state.num_questions}")
+    
        
     if "current_question" not in st.session_state:
-      with st.spinner("Generating Questions..."):
+      with st.spinner("🧠Generating your question..."):
         st.session_state.current_question=generate_question(
           st.session_state.role,
           st.session_state.difficulty,
@@ -131,7 +131,7 @@ if st.session_state.started:
         )
       
 
-
+    st.write(f"Question {st.session_state.current_q + 1} / {st.session_state.num_questions}")
     st.markdown("### Question:")
     st.write(st.session_state.current_question)
 
