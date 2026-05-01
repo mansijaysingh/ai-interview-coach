@@ -69,7 +69,7 @@ if not st.session_state.started:
 
    st.rerun()
 
-if not st.session_state.started:
+if st.session_state.started:
     st.markdown("## 🎯Interview in Progress")
 
     if (
@@ -188,7 +188,4 @@ if not st.session_state.started:
      st.rerun()     
 
 
-     if "answer" in st.session_state:
-       del st.session_state["answer"]
-      
-     st.rerun()
+    
