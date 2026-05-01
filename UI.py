@@ -29,11 +29,12 @@ if "show_ideal" not in st.session_state:
 st.title("🤖 AI Interview Coach")
 st.subheader("Practice. Evaluate. Improve.")
 
-st.write("Welcome! Start your AI-powered interview practice.")
-
-st.markdown("👉Setup Your Interview")
-
 if not st.session_state.started:
+
+  st.write("Welcome! Start your AI-powered interview practice.")
+
+  st.markdown("👉Setup Your Interview")
+
   # Role selection
   roles = [
     "Python",
@@ -68,7 +69,7 @@ if not st.session_state.started:
    st.rerun()
 
 if st.session_state.started:
-    st.write("Interview Started 🚀")
+     st.markdown("## 🎯 Interview in Progress")
 
     if (
       st.session_state.current_q>= st.session_state.num_questions
@@ -115,7 +116,7 @@ if st.session_state.started:
          st.rerun()
        st.stop()
 
-    st.write(f"Question: {st.session_state.current_q + 1}")
+    st.write(f"Question {st.session_state.current_q + 1} / {st.session_state.num_questions}")
        
     if "current_question" not in st.session_state:
       with st.spinner("Generating Questions..."):
