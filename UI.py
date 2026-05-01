@@ -69,7 +69,7 @@ if not st.session_state.started:
    st.rerun()
 
 if st.session_state.started:
-    st.subheader("🎯Interview in Progress")
+    st.markdown("## 🎯Interview in Progress")
 
     if (
       st.session_state.current_q>= st.session_state.num_questions
@@ -131,14 +131,17 @@ if st.session_state.started:
         )
       
 
-    st.write(f"Question {st.session_state.current_q + 1} / {st.session_state.num_questions}")
-    st.markdown("### Question:")
-    st.write(st.session_state.current_question)
+    st.markdown(f"### 📝 Question {st.session_state.current_q + 1} of {st.session_state.num_questions}")
+    st.markdown("## 💬 Interview Question")
+    st.info(st.session_state.current_question)
 
-    answer=st.text_area(
-      "Your Answer",
-      key=f"answer_{st.session_state.input_key}"
-    )
+    answer = st.text_area(
+    "",
+    key=f"answer_{st.session_state.input_key}",
+    placeholder="Type your answer here..."
+)
+    
+    st.markdown("---")
     col1, col2, col3 = st.columns(3)
     submit=col1.button("Submit")
     skip=col2.button("Skip")
@@ -174,12 +177,14 @@ if st.session_state.started:
 #End interview
     if end:
      st.session_state.ended=True
-     st.rerun()
+     
      
 
      if "current_question" in st.session_state:
        del st.session_state.current_question
-      
+     st.rerun()     
+
+
      if "answer" in st.session_state:
        del st.session_state["answer"]
       
