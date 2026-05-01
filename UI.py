@@ -26,11 +26,11 @@ if "show_ideal" not in st.session_state:
 
 
 
-st.title("🤖 AI Interview Coach")
-st.subheader("Practice. Evaluate. Improve.")
+
 
 if not st.session_state.started:
-
+  st.title("🤖 AI Interview Coach")
+  st.subheader("Practice. Evaluate. Improve.")
   st.write("Welcome! Start your AI-powered interview practice.")
 
   st.markdown("👉Setup Your Interview")
@@ -69,7 +69,7 @@ if not st.session_state.started:
    st.rerun()
 
 if st.session_state.started:
-     st.markdown("## 🎯 Interview in Progress")
+    st.subheader("🎯Interview in Progress")
 
     if (
       st.session_state.current_q>= st.session_state.num_questions
