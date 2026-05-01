@@ -69,8 +69,9 @@ if not st.session_state.started:
 
    st.rerun()
 
-if st.session_state.started:
-    st.markdown("## 🎯Interview in Progress")
+if st.session_state.started :
+    if not st.session_state.ended:
+     st.markdown("## 🎯Interview in Progress")
 
     if (
       st.session_state.current_q>= st.session_state.num_questions
