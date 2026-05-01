@@ -31,9 +31,10 @@ if "show_ideal" not in st.session_state:
 if not st.session_state.started:
   st.title("🤖 AI Interview Coach")
   st.subheader("Practice. Evaluate. Improve.")
-  st.write("Welcome! Start your AI-powered interview practice.")
-
-  st.markdown("👉Setup Your Interview")
+  # st.write("Welcome! Start your AI-powered interview practice.")
+  st.markdown("---")
+  st.markdown("## 🎯 Setup Your Interview")
+  
 
   # Role selection
   roles = [
@@ -45,20 +46,18 @@ if not st.session_state.started:
     "Data Analyst",
     "HR"
 ]
-
+  # st.markdown("### 🧑‍💻 Role & Experience")
   role=st.selectbox("Select Role", roles)
-
-# Experience
   experience = st.selectbox("Experience Level", ["Junior", "Mid", "Senior"])
 
-# Difficulty
+  # st.markdown("### ⚙️ Interview Settings")
   difficulty = st.selectbox("Difficulty", ["Easy", "Medium", "Hard"])
-
-# Number of questions
   num_questions = st.slider("Number of Questions", 1, 30, 5)
 
 # Start button
-  start = st.button("Start Interview 🚀")
+  col1, col2, col3 = st.columns([1,2,1])
+  with col2:
+    start = st.button("🚀 Start Interview", use_container_width=True)
   if start:
    st.session_state.started = True
    st.session_state.role=role
