@@ -77,15 +77,19 @@ if st.session_state.started :
       st.session_state.current_q>= st.session_state.num_questions
       or st.session_state.ended
     ):
-       st.markdown("## 🎉 Interview Completed")
-       st.markdown("---")
+       
 
 
        valid_data=[
         data for data in st.session_state.interview_data
         if data["answer"] != "Skipped"
     ]
-
+       attempted=len(valid_data)
+       if attempted>0:
+         st.markdown("## 🎉 Interview Completed")
+       else:
+          st.markdown("## ⚠️ Interview Ended")
+       st.markdown("---")
        st.markdown("## 📊 Final Evaluation")
 
        if len(valid_data)==0:
