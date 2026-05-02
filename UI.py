@@ -100,8 +100,10 @@ if st.session_state.started :
 
         st.write(result)
 
-        if st.button("Show Ideal Answers"):
-          st.session_state.show_ideal=True
+        col1,col2,col3=st.columns([1,2,1])
+        with col2:
+          if st.button("💡 Show Ideal Answers", use_container_width=True):
+            st.session_state.show_ideal=True
         
         if st.session_state.show_ideal:
           st.markdown("## 💡 Ideal Answers")
