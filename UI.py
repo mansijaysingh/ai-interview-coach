@@ -181,7 +181,8 @@ if st.session_state.started:
         f"### 📝 Question {st.session_state.current_q + 1} of {st.session_state.num_questions}"
     )
     st.markdown("## 💬 Interview Question")
-    st.info(st.session_state.current_question)
+    if "current_question" in st.session_state:
+        st.info(st.session_state.current_question)
 
     answer = st.text_area(
         "",
