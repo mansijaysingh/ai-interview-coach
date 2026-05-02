@@ -106,8 +106,9 @@ if st.session_state.started:
             st.info("You skipped all questions. Try attempting at least one 😊")
 
         else:
-            with st.spinner("Evaluating your overall performance..."):
-                result = evaluate_interview(valid_data)
+            if not st.session_state.show_ideal:
+                with st.spinner("Evaluating your overall performance..."):
+                  result = evaluate_interview(valid_data)
 
             if not st.session_state.show_ideal:
 
