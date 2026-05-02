@@ -123,15 +123,15 @@ if st.session_state.started:
 
             else:
                 st.markdown("## 💡 Ideal Answers")
-
-                for i in range(len(st.session_state.interview_data)):
+                with st.spinner("Generating all ideal answers..."):
+                 for i in range(len(st.session_state.interview_data)):
                     data = st.session_state.interview_data[i]
 
                     st.markdown(f"### Question {i+1}")
                     st.write(data["question"])
 
-                    with st.spinner("Generating ideal answer..."):
-                        ideal = generate_ideal_answer(data["question"])
+                    
+                    ideal = generate_ideal_answer(data["question"])
 
                     st.write("**Ideal Answer:**")
                     st.write(ideal)
