@@ -143,18 +143,10 @@ if st.session_state.started:
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             if st.button("🔄 Restart Interview", use_container_width=True):
-                st.session_state.clear()
-
-                st.session_state.started=False
-                st.session_state.current_q=0
-                st.session_state.interview_data=[]
-                st.session_state.asked_questions=[]
-                st.session_state.input_key=0
-                st.session_state.ended=False
                 st.session_state.show_ideal=False
-
-                if "current_question" in st.session_state:
-                    del st.session_state.current_question
+                st.session_state.ended=False
+                st.session_state.started=False
+                
                 st.rerun()
         st.stop()
 
