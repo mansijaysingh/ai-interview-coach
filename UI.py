@@ -81,8 +81,9 @@ if st.session_state.started:
 
     # ---------- END CONDITION ----------
     if (
-        st.session_state.current_q >= st.session_state.num_questions
-        or st.session_state.ended
+        (st.session_state.current_q >= st.session_state.num_questions
+         or st.session_state.ended)
+         and len(st.session_state.interview) > 0
     ):
 
         valid_data = [
@@ -152,7 +153,7 @@ if st.session_state.started:
                 if "current_question" in st.session_state:
                     del st.session_state.current_question
                 st.rerun()
-                st.stop()
+        st.stop()
 
         
 
