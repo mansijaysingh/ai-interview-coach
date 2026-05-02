@@ -73,7 +73,10 @@ if not st.session_state.started:
 # ---------------- INTERVIEW SCREEN ----------------
 if st.session_state.started:
 
-    if not st.session_state.ended:
+    if (
+        not st.session_state.ended
+        and st.session_state.current_q < st.session_state.num_questions
+    ):
         st.markdown("## 🎯Interview in Progress")
 
     # ---------- END CONDITION ----------
