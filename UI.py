@@ -152,11 +152,17 @@ if st.session_state.started:
                 if "current_question" in st.session_state:
                     del st.session_state.current_question
                 st.rerun()
+                st.stop()
 
-        st.stop()
+        
 
     # ---------- QUESTION GENERATION ----------
-    if "current_question" not in st.session_state:
+    if(
+        st.session_state.started
+        and not st.session_state.ended
+        and st.session_state.current_q < st.session_state.num_questions
+        and "current_question" not in st.session_state
+    ):
 
         with st.spinner("🧠Generating your question..."):
             st.session_state.current_question = generate_question(
