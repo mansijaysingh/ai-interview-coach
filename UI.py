@@ -84,32 +84,40 @@ if st.session_state.started :
         data for data in st.session_state.interview_data
         if data["answer"] != "Skipped"
     ]
-       attempted=len(valid_data)
-       if attempted>0:
-         st.markdown("## 🎉 Interview Completed")
-       else:
-          st.markdown("## ⚠️ Interview Ended")
-       st.markdown("---")
-       st.markdown("## 📊 Final Evaluation")
 
-       if len(valid_data)==0:
+       attempted=len(valid_data)
+
+       if not st.session_state.show_ideal:
+        if attempted>0:
+         st.markdown("## 🎉 Interview Completed")
+        else:
+          st.markdown("## ⚠️ Interview Ended")
+        st.markdown("---")
+        st.markdown("## 📊 Final Evaluation")
+
+       if attempted==0:
         st.info("You skipped all questions. Try attempting at least one 😊")
        else:
         with st.spinner("Evaluating your overall performance..."):
          result=evaluate_interview(valid_data)
 
         if not st.session_state.show_ideal:
+
           st.write(result)
           st.markdown("---")
 
           col1,col2,col3=st.columns([1,2,1])
           with col2:
+           
            if st.button("💡 Show Ideal Answers", use_container_width=True):
+             
              st.session_state.show_ideal=True
              st.rerun()
+       
+       
         else:
           st.markdown("## 💡 Ideal Answers")
-          
+
           for i, data in enumerate(st.session_state.interview_data, start=1):
             st.markdown(f"### Question {i}")
             st.write(data["question"])
@@ -121,6 +129,7 @@ if st.session_state.started :
             st.write(ideal)
 
             st.markdown("---")
+            
        col1,col2,col3=st.columns([1,2,1])
        with col2:
         if st.button("🔄 Restart Interview", use_container_width=True):
