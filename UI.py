@@ -83,7 +83,7 @@ if st.session_state.started:
     if (
         (st.session_state.current_q >= st.session_state.num_questions
          or st.session_state.ended)
-         and len(st.session_state.interview) > 0
+         and len(st.session_state.interview_data) > 0
     ):
 
         valid_data = [
@@ -123,6 +123,7 @@ if st.session_state.started:
                         st.rerun()
 
             else:
+               if st.session_state.show_ideal and st.session_state.ended:
                 st.markdown("## 💡 Ideal Answers")
                 with st.spinner("Generating all ideal answers..."):
                  for i in range(len(st.session_state.interview_data)):
@@ -142,6 +143,8 @@ if st.session_state.started:
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             if st.button("🔄 Restart Interview", use_container_width=True):
+                st.session_state.clear()
+
                 st.session_state.started=False
                 st.session_state.current_q=0
                 st.session_state.interview_data=[]
