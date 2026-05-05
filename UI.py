@@ -1,6 +1,6 @@
 import streamlit as st
 import re
-from app import generate_question, evaluate_interview, generate_ideal_answer
+from app import generate_question, evaluate_interview
 
 st.set_page_config(page_title="AI Interview Coach", layout="centered")
 
@@ -25,9 +25,6 @@ if "input_key" not in st.session_state:
 
 if "ended" not in st.session_state:
     st.session_state.ended = False
-
-if "show_ideal" not in st.session_state:
-    st.session_state.show_ideal = False
 
 if "num_questions" not in st.session_state:
     st.session_state.num_questions = 0
@@ -93,64 +90,33 @@ if st.session_state.started:
 
         attempted = len(valid_data)
 
-        if not st.session_state.show_ideal:
+        if attempted > 0:
+            st.markdown("## 🎉 Interview Completed")
+        else:
+            st.markdown("## ⚠️ Interview Ended")
 
-            if attempted > 0:
-                st.markdown("## 🎉 Interview Completed")
-            else:
-                st.markdown("## ⚠️ Interview Ended")
-
-            st.markdown("---")
-            st.markdown("## 📊 Final Evaluation")
+        st.markdown("---")
+        st.markdown("## 📊 Final Evaluation")
 
         if attempted == 0:
             st.info("You skipped all questions. Try attempting at least one 😊")
 
         else:
-            if not st.session_state.show_ideal:
-                with st.spinner("Evaluating your overall performance..."):
-                  result = evaluate_interview(valid_data)
+            with st.spinner("Evaluating your overall performance..."):
+                result = evaluate_interview(valid_data)
 
-            if not st.session_state.show_ideal:
-
-                st.write(result)
-                st.markdown("---")
-
-                col1, col2, col3 = st.columns([1, 2, 1])
-                with col2:
-                    if st.button("💡 Show Ideal Answers", use_container_width=True):
-                        st.session_state.show_ideal = True
-                        st.rerun()
-
-            else:
-               if st.session_state.show_ideal and st.session_state.ended:
-                st.markdown("## 💡 Ideal Answers")
-                with st.spinner("Generating all ideal answers..."):
-                 for i in range(len(st.session_state.interview_data)):
-                    data = st.session_state.interview_data[i]
-
-                    st.markdown(f"### Question {i+1}")
-                    st.write(data["question"])
-
-                    
-                    ideal = generate_ideal_answer(data["question"])
-
-                    st.write("**Ideal Answer:**")
-                    st.write(ideal)
-
-                    st.markdown("---")
+            st.write(result)
+            st.markdown("---")
 
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             if st.button("🔄 Restart Interview", use_container_width=True):
-                st.session_state.show_ideal=False
-                st.session_state.ended=False
-                st.session_state.started=False
-                
+                st.session_state.ended = False
+                st.session_state.started = False
                 st.rerun()
+
         st.stop()
 
-        
 
     # ---------- QUESTION GENERATION ----------
     if(
@@ -177,6 +143,7 @@ if st.session_state.started:
         f"### 📝 Question {st.session_state.current_q + 1} of {st.session_state.num_questions}"
     )
     st.markdown("## 💬 Interview Question")
+
     if "current_question" in st.session_state:
         st.info(st.session_state.current_question)
 
