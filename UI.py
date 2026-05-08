@@ -50,13 +50,31 @@ if not st.session_state.started:
     ]
 
     role = st.selectbox("Select Role", roles)
-    experience = st.selectbox("Experience Level", ["Junior", "Mid", "Senior"])
-    difficulty = st.selectbox("Difficulty", ["Easy", "Medium", "Hard"])
-    num_questions = st.slider("Number of Questions", 1, 30, 5)
+
+    experience = st.selectbox(
+        "Experience Level",
+        ["Junior", "Mid", "Senior"]
+    )
+
+    difficulty = st.selectbox(
+        "Difficulty",
+        ["Easy", "Medium", "Hard"]
+    )
+
+    num_questions = st.slider(
+        "Number of Questions",
+        1,
+        30,
+        5
+    )
 
     col1, col2, col3 = st.columns([1, 2, 1])
+
     with col2:
-        start = st.button("🚀 Start Interview", use_container_width=True)
+        start = st.button(
+            "🚀 Start Interview",
+            use_container_width=True
+        )
 
     if start:
         st.session_state.started = True
@@ -64,12 +82,14 @@ if not st.session_state.started:
         st.session_state.experience = experience
         st.session_state.difficulty = difficulty
         st.session_state.num_questions = num_questions
+
         st.rerun()
 
 
 # ---------------- INTERVIEW SCREEN ----------------
 if st.session_state.started:
 
+    # ---------- INTERVIEW STATUS ----------
     if (
         not st.session_state.ended
         and st.session_state.current_q < st.session_state.num_questions
@@ -78,9 +98,8 @@ if st.session_state.started:
 
     # ---------- END CONDITION ----------
     if (
-        (st.session_state.current_q >= st.session_state.num_questions
-         or st.session_state.ended)
-         and len(st.session_state.interview_data) > 0
+        st.session_state.current_q >= st.session_state.num_questions
+        or st.session_state.ended
     ):
 
         valid_data = [
@@ -90,67 +109,60 @@ if st.session_state.started:
 
         attempted = len(valid_data)
 
-        if not st.session_state.show_ideal:
+        # ---------- HEADINGS ----------
+        if attempted > 0:
+            st.markdown("## 🎉 Interview Completed")
+        else:
+            st.markdown("## ⚠️ Interview Ended")
 
-            if attempted > 0:
-                st.markdown("## 🎉 Interview Completed")
-            else:
-                st.markdown("## ⚠️ Interview Ended")
+        st.markdown("---")
+        st.markdown("## 📊 Final Evaluation")
+
+        # ---------- NO ATTEMPT CASE ----------
+        if attempted == 0:
+
+            st.info(
+                "You skipped all questions. Try attempting at least one 😊"
+            )
+
+        # ---------- EVALUATION ----------
+        else:
+
+            with st.spinner(
+                "Evaluating your overall performance..."
+            ):
+                result = evaluate_interview(valid_data)
+
+            st.write(result)
 
             st.markdown("---")
-            st.markdown("## 📊 Final Evaluation")
 
-        if attempted == 0:
-            st.info("You skipped all questions. Try attempting at least one 😊")
-
-        else:
-            if not st.session_state.show_ideal:
-                with st.spinner("Evaluating your overall performance..."):
-                  result = evaluate_interview(valid_data)
-
-            if not st.session_state.show_ideal:
-
-                st.write(result)
-                st.markdown("---")
-
-                col1, col2, col3 = st.columns([1, 2, 1])
-                with col2:
-                    if st.button("💡 Show Ideal Answers", use_container_width=True):
-                        st.session_state.show_ideal = True
-                        st.rerun()
-
-            else:
-               if st.session_state.show_ideal and st.session_state.ended:
-                st.markdown("## 💡 Ideal Answers")
-                with st.spinner("Generating all ideal answers..."):
-                 for i in range(len(st.session_state.interview_data)):
-                    data = st.session_state.interview_data[i]
-
-                    st.markdown(f"### Question {i+1}")
-                    st.write(data["question"])
-
-                    
-                    
-
-                    st.write("**Ideal Answer:**")
-                    st.write(ideal)
-
-                    st.markdown("---")
-
+        # ---------- RESTART BUTTON ----------
         col1, col2, col3 = st.columns([1, 2, 1])
+
         with col2:
-            if st.button("🔄 Restart Interview", use_container_width=True):
-                st.session_state.show_ideal=False
-                st.session_state.ended=False
-                st.session_state.started=False
-                
+
+            if st.button(
+                "🔄 Restart Interview",
+                use_container_width=True
+            ):
+
+                st.session_state.started = False
+                st.session_state.current_q = 0
+                st.session_state.interview_data = []
+                st.session_state.asked_questions = []
+                st.session_state.input_key = 0
+                st.session_state.ended = False
+
+                if "current_question" in st.session_state:
+                    del st.session_state.current_question
+
                 st.rerun()
+
         st.stop()
 
-        
-
     # ---------- QUESTION GENERATION ----------
-    if(
+    if (
         st.session_state.started
         and not st.session_state.ended
         and st.session_state.current_q < st.session_state.num_questions
@@ -158,6 +170,7 @@ if st.session_state.started:
     ):
 
         with st.spinner("🧠Generating your question..."):
+
             st.session_state.current_question = generate_question(
                 st.session_state.role,
                 st.session_state.difficulty,
@@ -171,12 +184,18 @@ if st.session_state.started:
 
     # ---------- QUESTION DISPLAY ----------
     st.markdown(
-        f"### 📝 Question {st.session_state.current_q + 1} of {st.session_state.num_questions}"
+        f"### 📝 Question "
+        f"{st.session_state.current_q + 1} "
+        f"of "
+        f"{st.session_state.num_questions}"
     )
+
     st.markdown("## 💬 Interview Question")
+
     if "current_question" in st.session_state:
         st.info(st.session_state.current_question)
 
+    # ---------- ANSWER INPUT ----------
     answer = st.text_area(
         "",
         key=f"answer_{st.session_state.input_key}",
@@ -185,13 +204,16 @@ if st.session_state.started:
 
     st.markdown("---")
 
+    # ---------- BUTTONS ----------
     col1, col2, col3 = st.columns(3)
+
     submit = col1.button("Submit")
     skip = col2.button("Skip")
     end = col3.button("End Interview")
 
     # ---------- SUBMIT ----------
     if submit and answer:
+
         st.session_state.interview_data.append({
             "question": st.session_state.current_question,
             "answer": answer
@@ -201,10 +223,12 @@ if st.session_state.started:
         st.session_state.input_key += 1
 
         del st.session_state.current_question
+
         st.rerun()
 
     # ---------- SKIP ----------
     if skip:
+
         st.session_state.interview_data.append({
             "question": st.session_state.current_question,
             "answer": "Skipped"
@@ -214,10 +238,12 @@ if st.session_state.started:
         st.session_state.input_key += 1
 
         del st.session_state.current_question
+
         st.rerun()
 
-    # ---------- END ----------
+    # ---------- END INTERVIEW ----------
     if end:
+
         st.session_state.ended = True
 
         if "current_question" in st.session_state:
