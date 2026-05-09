@@ -151,6 +151,10 @@ ai-interview-coach/
 ├── .env
 └── README.md
 ```
+---
+# 🌐 Live Demo
+
+https://your-app-name.streamlit.app
 
 ---
 
