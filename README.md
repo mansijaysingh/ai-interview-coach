@@ -154,7 +154,7 @@ ai-interview-coach/
 ---
 # 🌐 Live Demo
 
-https://your-app-name.streamlit.app
+[https://your-app-name.streamlit.app](https://ai-interview-coach-mansijaysingh.streamlit.app/)
 
 ---
 
